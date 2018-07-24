@@ -1,11 +1,11 @@
 puts "Enter a: "
-a = gets.to_i
+a = gets.to_f
 
 puts "Enter b: "
-b = gets.to_i
+b = gets.to_f
 
 puts "Enter c: "
-c = gets.to_i
+c = gets.to_f
 
 if a <= 0 || b <= 0 || c <= 0
 	puts "Это не треугольник."
