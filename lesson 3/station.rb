@@ -8,7 +8,7 @@ class Station
   end
 
   def arrival_train train
-    @train_list < train
+    @train_list << train
     puts "На станцию #{name} прибыл поезд №#{train.number}"
   end
 
