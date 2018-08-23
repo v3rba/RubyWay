@@ -1,27 +1,26 @@
 class Station
 
-  attr_reader :station_name
+  attr_reader :name, :trains
 
-  def initialize station_name
-    @station_name = station_name
-    @train_list = []
+  def initialize name
+    @name = name
+    @trains = []
   end
 
-  def arrival_train train
-    @train_list << train
-    puts "На станцию #{name} прибыл поезд №#{train.number}"
+  def get_train train
+    @trains << train
   end
 
-  def display_train_list
-    @train_list.each { |train| puts "Поезд №#{train.number}, #{train.type}, #{train.wagons}" }
+  def delete_train train
+    @trains.delete(train)
   end
 
-  def train_list_type type
-    @train_list.each { |train| train_type_counter +=1 if train.type.include?(self) }
+  def all_trains
+    @trains.each { |train| puts "#{train}" }
   end
 
-  def departure_train train
-    @train_list.delete(train)
+  def show_trains type
+    trains.select { |train| train.type == type }
   end
 
 end

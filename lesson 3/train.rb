@@ -1,61 +1,74 @@
 class Train
-
-  attr_accessor :speed, :route
-  attr_reader :number, :type, :carriages, :current_station, :current_station_id
+  attr_accessor :carriages, :speed, :current_station_id
+  attr_reader :number, :type, :route
 
   def initialize number, type, carriages
     @number = number
     @type = type
     @carriages = carriages
-
     @speed = 0
-    @current_station_id = 0 
   end
 
-  def increase_speed speed
-    self.speed += speed
+  def gain_speed
+    self.speed += 10
   end
 
   def stop
     self.speed = 0
   end
 
-  def add_carriages
-    @carriages += 1 if self.speed == 0  
+  def add_carriage
+    self.carriages += 1 if is_stopped?
   end
 
-  def remove_carriages
-    @carriages -= 1 if self.speed == 0 
+  def delete_carriage
+    self.carriages -= 1 if is_stopped?
   end
 
-  def show_route_list
-    route.route_list 
+  def route=(route)
+    @route = route
+    self.current_station_id = 0
   end
 
-  def set_starting_station
-    @current_station = route.route_list[0]  
-  end 
+  def go
+    route.stations.each { |station| go_to_the_next_station } if at_start?
+  end
 
-  def go_forward
-    if route.route_list.last != current_station && current_station_id <= route.route_list.length
-      @current_station_id += 1
-      @current_station = route.route_list[current_station_id]
+  def current_station
+    route.stations[current_station_id]
+  end
+
+  def next_station
+    route.stations[current_station_id + 1] if has_next?
+  end
+
+  def previous_station
+    route.stations[current_station_id - 1] if has_previous?
+  end
+
+  def go_to_the_next_station
+    if has_next?
+      gain_speed
+      current_station.delete_train(self)
+      self.current_station_id += 1
+      current_station.get_train(self)
+      stop
     end
   end
 
-  def go_backward
-    if route.route_list[0] != current_station && current_station_id > 0
-      @current_station_id -= 1
-      @current_station = route.route_list[current_station_id]
-    end
-  end
-    
-  def show_next_station
-    puts "Следующая станция #{route.route_list[@current_station_id + 1].station_name}"
+  def at_start?
+    current_station_id.zero?
   end
 
-  def show_prev_station
-    puts "Предыдущая станция #{route.route_list[@current_station_id - 1].station_name}"
+  def has_next?
+    current_station_id < route.stations.size - 1
   end
 
+  def has_previous?
+    current_station_id > 0
+  end
+
+  def is_stopped?
+    speed.zero?
+  end
 end
