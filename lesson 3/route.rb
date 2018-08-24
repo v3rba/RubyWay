@@ -19,7 +19,7 @@ class Route
   end
 
   def remove_station station
-    @stations.delete(station) if station != from && station != to
+    unless [from, to].include?(station)
   end
 
   def show_stations
