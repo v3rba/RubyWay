@@ -1,4 +1,4 @@
-class TrainPassenger < Train
+class TrainPassanger < Train
   def initialize name, carriages
     super(number, "passanger", carriages)
   end

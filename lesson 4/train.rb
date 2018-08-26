@@ -16,23 +16,23 @@ class Train
     self.speed = 0
   end
 
-  def add_carriage
-    self.carriages += 1 if is_stopped?
+  def add_carriage carriage
+    self.carriages << carriage if is_stopped? && is_correct_carriage?(carriage)
   end
 
-  def delete_carriage
-    self.carriages -= 1 if is_stopped?
+  def delete_carriage carriage = self.carriages.last
+    self.carriages.delete(carriage) if is_stopped?
   end
 
   def is_correct_carriage? carriage
     carriage_type =
       case self.type
       when "cargo"
-        CargoCarriage
+        CarCargo
       when "passanger"
-        PassangerCarriage
+        CarPassanger
       else
-        Carriage
+        Car
       end
     carriage.class == carriage_type
   end
@@ -54,7 +54,7 @@ class Train
     route.stations[current_station_id - 1] if has_previous?
   end
 
-  private 
+  private  
 
   attr_accessor :current_station_id
   attr_writer :speed
