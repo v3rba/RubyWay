@@ -40,7 +40,6 @@ class TrainConsole
     end
   end
 
-
   private 
 
   def help
@@ -104,7 +103,7 @@ class TrainConsole
     puts self.stations[index].trains
   end
 
-  def chose_station
+  def choose_station
     puts "Your stations:"
     puts stations
 

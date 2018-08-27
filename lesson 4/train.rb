@@ -43,7 +43,7 @@ class Train
   end
 
   def current_station
-    route.stations[current_station_id]
+    route.stations[current_station_id] if route
   end
 
   def next_station
@@ -54,21 +54,21 @@ class Train
     route.stations[current_station_id - 1] if has_previous?
   end
 
-  private  
-
-  attr_accessor :current_station_id
-  attr_writer :speed
-
   def go
     route.stations.each { |station| go_to_the_next_station } if at_start?
   end
 
+  protected 
+
+  attr_accessor :current_station_id
+  attr_writer :speed
+
   def go_to_the_next_station
     if has_next?
       gain_speed
-      current_station.delete_train(self)
+      current_station.delete_train(self) if current_station
       self.current_station_id += 1
-      current_station.get_train(self)
+      current_station.get_train(self) if current_station
       stop
     end
   end
