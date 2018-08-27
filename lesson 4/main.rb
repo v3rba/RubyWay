@@ -1,4 +1,3 @@
-
 require "./train_console"
 
 train_console = TrainConsole.new
