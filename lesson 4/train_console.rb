@@ -2,10 +2,10 @@ require "./train"
 require "./route"
 require "./station"
 require "./car"
-require "./car_passanger"
+require "./car_passenger"
 require "./car_cargo"
 require "./train_cargo"
-require "./train_passanger"
+require "./train_pessanger"
 
 class TrainConsole
   attr_reader :stations, :trains
@@ -136,7 +136,7 @@ class TrainConsole
     puts "Train number? "
     number = gets.chomp
 
-    puts 'Train type? ("cargo" for cargo or "passanger" for passanger). '
+    puts 'Train type? ("cargo" for cargo or "passenger" for passenger). '
     type = gets.chomp
 
     puts "Count carriages? "
@@ -150,7 +150,7 @@ class TrainConsole
     when "cargo"
       TrainCargo.new(number, [])
     when "passanger"
-      TrainPassanger.new(number, [])
+      TrainPassenger.new(number, [])
     else
       Train.new(number, type, [])
     end
@@ -160,8 +160,8 @@ class TrainConsole
     case type
     when "cargo"
       CarCargo.new
-    when "passanger"
-      CarPassanger.new
+    when "passenger"
+      CarPassenger.new
     else
       Car.new
     end

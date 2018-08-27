@@ -1,2 +1,0 @@
-class CarPassanger < Car
-end
