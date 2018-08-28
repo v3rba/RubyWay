@@ -5,7 +5,7 @@ require "./car"
 require "./car_passenger"
 require "./car_cargo"
 require "./train_cargo"
-require "./train_pessanger"
+require "./train_passenger"
 
 class TrainConsole
   attr_reader :stations, :trains
@@ -79,7 +79,7 @@ class TrainConsole
 
   def delete_carriage
     index = choose_train
-    if self.trains[index].nill?
+    if self.trains[index].nil?
       puts "Wrong index."
     else
       self.trains[index].delete_carriage
@@ -162,8 +162,6 @@ class TrainConsole
       CarCargo.new
     when "passenger"
       CarPassenger.new
-    else
-      Car.new
     end
   end
 

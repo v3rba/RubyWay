@@ -3,7 +3,6 @@ class Train
 
   def initialize number, type, carriages
     @number = number
-    @type = type
     @carriages = carriages
     @speed = 0
   end
@@ -31,8 +30,6 @@ class Train
         CarCargo
       when "passanger"
         CarPassanger
-      else
-        Car
       end
     carriage.class == carriage_type
   end
@@ -88,4 +85,6 @@ class Train
   def is_stopped?
     speed.zero?
   end
+
+
 end
