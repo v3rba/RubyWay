@@ -6,7 +6,7 @@ module Instances
       self.instances
     end
 
-    def find(id)
+    def find id
       self.instances[id]
     end
   end
@@ -14,7 +14,7 @@ module Instances
   module InstanceMethods
     protected
 
-    def add(instance)
+    def add instance
       type = self.class
       while type.methods.include?(:instances)
         type.instances ||= []
@@ -24,8 +24,8 @@ module Instances
     end
   end
 
-  def self.included(receiver)
-    receiver.extend         ClassMethods
+  def self.included receiver
+    receiver.extend ClassMethods
     receiver.send :include, InstanceMethods
   end
 end
