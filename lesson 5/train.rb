@@ -1,8 +1,13 @@
+require "./manufacturer"
+
 class Train
+  include Manufacturer
+  include Instances
   attr_reader :number, :type, :route, :carriages, :speed
 
   def initialize number, type, carriages
     @number = number
+    @type = type
     @carriages = carriages
     @speed = 0
   end

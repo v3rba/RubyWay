@@ -1,5 +1,7 @@
-class Station
+require "./instances"
 
+class Station
+  include Instances
   attr_reader :name, :trains
 
   def initialize name
@@ -11,7 +13,7 @@ class Station
     @trains << train
   end
 
-  def delete_train train
+  def delete_train train 
     @trains.delete(train)
   end
 
@@ -22,5 +24,4 @@ class Station
   def show_trains type
     trains.select { |train| train.type == type }
   end
-
 end
