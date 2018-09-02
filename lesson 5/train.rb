@@ -10,6 +10,7 @@ class Train
     @type = type
     @carriages = carriages
     @speed = 0
+    add(self)
   end
 
   def gain_speed
