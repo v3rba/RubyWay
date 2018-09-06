@@ -6,14 +6,10 @@ require "./car_passenger"
 require "./car_cargo"
 require "./train_cargo"
 require "./train_passenger"
+require "./validation_error"
 
 class TrainConsole
   attr_reader :stations, :trains
-
-  def initialize
-    @stations = []
-    @trains = []
-  end
 
   def start
     loop do
