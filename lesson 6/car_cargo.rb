@@ -1,0 +1,2 @@
+class CarCargo < Car
+end
