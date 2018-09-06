@@ -7,7 +7,7 @@ class Train
   NUMBER_PATTERN = /^[a-z\d]{3}-?[a-z\d]{2}$/i
   TYPE_PATTERN = /^[a-z]{3,}$/i
 
-  def initialize number, type, carriages
+  def initialize(number, type, carriages)
     @number = number
     @type = type
     @carriages = carriages

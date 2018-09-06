@@ -115,7 +115,7 @@ class TrainConsole
     gets.chomp.to_i
   end
 
-  def create_train! number, type, carriages_count
+  def create_train!(number, type, carriages_count)
     carriage = get_carriage(type)
     train = get_train(number, type)
     carriages_count.times { train.add_carriage(carriage) }
@@ -141,7 +141,7 @@ class TrainConsole
     return number, type, carriages_count
   end
 
-  def get_train number, type 
+  def get_train(number, type)
     case type
     when "cargo"
       TrainCargo.new(number, [])
@@ -161,7 +161,7 @@ class TrainConsole
     end
   end
 
-  def move_train! train_index, station_index
+  def move_train!(train_index, station_index)
     route = Route.new(self.trains[train_index].current_station, self.stations[station_index])
     self.trains[train_index].route = route
     self.trains[train_index].go
