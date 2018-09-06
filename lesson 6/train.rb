@@ -2,7 +2,6 @@ require "./manufacturer"
 
 class Train
   include Manufacturer
-  include Instances
   attr_reader :number, :type, :route, :carriages, :speed
 
   NUMBER_PATTERN = /^[a-z\d]{3}-?[a-z\d]{2}$/i

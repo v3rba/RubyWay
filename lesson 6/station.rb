@@ -1,8 +1,6 @@
-require "./instances"
 require "./validation_error"
 
 class Station
-  include Instances
   attr_reader :name, :trains
 
   NAME_PATTERN = /^[a-z]{3,}$/i
