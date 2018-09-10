@@ -1,59 +1,85 @@
 class Train
-  attr_accessor :carriages, :speed, :current_station_id
-  attr_reader :number, :type, :route
+  attr_accessor :speed, :current_station_id
+  attr_reader :route
 
-  def initialize number, type, carriages
-    @number = number
-    @type = type
-    @carriages = carriages
+  def initialize (train_number, train_type, train_carriage_count)
+    @train_number = train_number
+    @train_type = train_type
+    @train_carriage_count = train_carriage_count
     @speed = 0
   end
 
-  def gain_speed
-    self.speed += 10
+  def train_gain_speed
+    @speed += 100
   end
 
-  def stop
-    self.speed = 0
+  def train_current_speed
+    @speed
   end
 
-  def add_carriage
-    self.carriages += 1 if is_stopped?
+  def train_stop
+    @speed = 0
   end
 
-  def delete_carriage
-    self.carriages -= 1 if is_stopped?
+  def train_carriage_count
+    @train_carriage_count
   end
 
-  def route=(route)
+  def train_add_carriage
+    if train_stopped?
+      @train_carriage_count += 1
+    else
+      puts "Error. To attach the car please stop the train."
+    end
+  end
+
+  def train_remove_carriage
+    if train_stopped? 
+      @train_carriage_count -= 1
+    else
+     puts "Error. To remove the car please stop the train."
+    end
+  end
+
+  def train_take_route route
     @route = route
     self.current_station_id = 0
   end
 
-  def go
-    route.stations.each { |station| go_to_the_next_station } if at_start?
-  end
-
-  def current_station
+  def train_current_station
     route.stations[current_station_id]
   end
 
-  def next_station
+  def train_next_station
     route.stations[current_station_id + 1] if has_next?
   end
 
-  def previous_station
+  def train_previous_station
     route.stations[current_station_id - 1] if has_previous?
   end
 
-  def go_to_the_next_station
+  def train_go_next_station
     if has_next?
-      gain_speed
-      current_station.delete_train(self)
+      train_gain_speed
+      train_current_station.train_send(self)
       self.current_station_id += 1
-      current_station.get_train(self)
-      stop
+      train_current_station.train_get(self)
+      train_stop
     end
+  end
+
+  def train_go_back_station
+    if has_previous?
+      train_gain_speed
+      train_current_station.train_send(self)
+      self.current_station_id -= 1
+      train_current_station.train_get(self)
+      train_stop
+    end
+  end
+
+  def train_stopped?
+    speed.zero?
   end
 
   def at_start?
@@ -68,7 +94,4 @@ class Train
     current_station_id > 0
   end
 
-  def is_stopped?
-    speed.zero?
-  end
 end
