@@ -7,10 +7,10 @@ require_relative 'route'
 class TextInterface
   
   def session
-    puts "Введите -- ct -- для создания поезда "
-    puts "Введите -- cs -- для создания станций "
-    puts "Введите -- exit -- для выхода из программы "
     loop do
+      puts "Введите -- ct -- для создания поезда "
+      puts "Введите -- cs -- для создания станций "
+      puts "Введите -- exit -- для выхода из программы "
       command = gets.chomp.downcase
       case command
         when 'ct'
