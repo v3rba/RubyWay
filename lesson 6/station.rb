@@ -1,6 +1,6 @@
 require_relative 'train'
 require_relative 'cargotrain'
-require_relative 'passangertrain'
+require_relative 'passengertrain'
 require_relative 'station'
 require_relative 'route'
 
@@ -33,7 +33,7 @@ private
     if type == 'car'
       CargoTrain.new(train_name)
     elsif type == 'pass'
-      PassangerTrain.new(train_name)
+      PassengerTrain.new(train_name)
     end
   rescue RuntimeError => e
     puts e.message

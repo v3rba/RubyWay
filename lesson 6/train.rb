@@ -1,9 +1,9 @@
-require_relative 'companymanagment'
+require_relative 'companymanagement'
 require_relative 'instancecounter'
 
 class Train
 
-  include CompanyManagment
+  include CompanyManagement
   include InstanceCounter
 
   attr_accessor :route 

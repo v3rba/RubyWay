@@ -1,4 +1,4 @@
-class PassangerCarriage < Carriage
+class PassengerCarriage < Carriage
 
   INIT_WHEELS = 8
   INIT_HEIGHT = 4
