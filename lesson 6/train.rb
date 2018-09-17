@@ -9,7 +9,7 @@ class Train
   attr_accessor :route 
   attr_reader :number, :speed, :carriages, :current_station, :current_station_id
 
-  NUMBER_FORMAT = /^([а-я]{3}|\d{3})(-|)([а-я]{2}|\d{2})$/i
+  NUMBER_FORMAT = /^[a-z]{1}\d{3}[a-z]{1}$/i
 
   @@trains = {}
 
@@ -61,11 +61,11 @@ class Train
     route.route_list
   end
 
-  def set_starting_station 
+  def set_starting_station
     @current_station = route.route_list[0]
-  end 
+  end
 
-  def go_forward 
+  def go_forward
     if route.route_list.last != current_station && current_station_id <= route.route_list.length
       @current_station_id += 1
       @current_station = route.route_list[current_station_id]
@@ -83,7 +83,7 @@ class Train
     puts "Следующая станция #{route.route_list[@current_station_id + 1].station_name}"
   end
 
-  def show_prev_station 
+  def show_prev_station
     puts "Предыдущая станция #{route.route_list[@current_station_id - 1].station_name}"
   end
 

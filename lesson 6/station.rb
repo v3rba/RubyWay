@@ -1,53 +1,53 @@
-require_relative 'train'
-require_relative 'cargotrain'
-require_relative 'passengertrain'
-require_relative 'station'
-require_relative 'route'
+require_relative 'instancecounter'
 
-class TextInterface
-  
-  def session
-    puts "Введите -- ct -- для создания поезда "
-    puts "Введите -- cs -- для создания станций "
-    puts "Введите -- exit -- для выхода из программы "
-    loop do
-      command = gets.chomp.downcase
-      case command
-        when 'ct'
-          ct
-        when 'cs'
-          cs
-        when 'exit'
-          break
-      end
-    end
+class Station
+  include InstanceCounter
+  attr_reader :station_name 
+
+  @@stations = []
+
+  def self.all
+    @@stations
   end
 
-private
-  
-  def ct
-    puts "Введите тип поезда --- car\\pass--- грузовой\\пассажирский"
-    type = gets.chomp.downcase
-    puts "Введите номер поезда"
-    train_name = gets.chomp
-    if type == 'car'
-      CargoTrain.new(train_name)
-    elsif type == 'pass'
-      PassengerTrain.new(train_name)
-    end
-  rescue RuntimeError => e
-    puts e.message
+  def initialize(station_name)
+    register_instance
+    @station_name = station_name
+    @train_list = []
+    validate!
+    @@stations << self
   end
 
-  def cs
-    puts "Введите название станций"
-    station_name = gets.chomp
-    Station.new(station_name)
-  rescue RuntimeError => e
-    puts e.message
+  def valid?
+    validate!
+  rescue
+    false
+  end  
+
+  def arrival_train(train)
+    @train_list << train
   end
 
+  def show_train_list
+    @train_list.each { |train| puts "Поезд №#{train.number} | Тип #{train.type} | Количество вагонов #{train.carriages.length}" }
+  end
+
+  def train_list_type(type)
+    train_type_counter = 0
+    @train_list.each { |train| train_type_counter +=1 if train.type.eql?(type) }
+
+    puts "Количество поездов на станций #{@station_name} типа #{type} равно #{train_type_counter} "
+  end
+
+  def departure_train(train)
+    @train_list.delete(train)
+  end
+
+  protected
+
+  def validate!
+    raise "Название станций не может быть nil" if station_name.nil?
+    raise "Название станций дожно быть меньше 50 символов" if station_name.length > 50
+    true
+  end
 end
-
-ti = TextInterface.new()
-ti.session
