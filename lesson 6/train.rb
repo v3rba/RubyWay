@@ -1,105 +1,101 @@
-require "./manufacturer"
+require_relative 'companymanagment'
+require_relative 'instancecounter'
 
 class Train
-  include Manufacturer
-  attr_reader :number, :type, :route, :carriages, :speed
 
-  NUMBER_PATTERN = /^[a-z]{1}\d{3}[a-z]{2}$/i
-  TYPE_PATTERN = /^[a-z]{3}$/i
+  include CompanyManagment
+  include InstanceCounter
 
-  def initialize(number, type, carriages)
+  attr_accessor :route 
+  attr_reader :number, :speed, :carriages, :current_station, :current_station_id
+
+  NUMBER_FORMAT = /^([а-я]{3}|\d{3})(-|)([а-я]{2}|\d{2})$/i
+
+  @@trains = {}
+
+  def self.find(train_number)
+    @@trains[train_number]
+  end
+
+  def initialize(number)
+    register_instance
     @number = number
-    @type = type
-    @carriages = carriages
+    @carriages = []
     @speed = 0
+    @current_station_id = 0
     validate!
-    add(self)
+    @@trains[@number] = self
   end
 
-  def gain_speed
-    self.speed += 10
+  def valid?
+    validate!
+  rescue
+    false
   end
 
-  def stop
+  def add_carriages(carriage)
+    @carriages << carriage if train_stopped?
+  end
+
+  def remove_carriages(carriage)
+    @carriages.delete(carriage) if train_stopped?
+  end
+
+  def type
+    self.class
+  end
+
+  def increase_speed(speed)
+    self.speed += speed
+  end
+
+  def train_stopped?
+    self.speed.zero?
+  end
+
+  def stop 
     self.speed = 0
   end
 
-  def add_carriage carriage
-    self.carriages << carriage if is_stopped? && is_correct_carriage?(carriage)
+  def show_route_list
+    route.route_list
   end
 
-  def delete_carriage carriage = self.carriages.last
-    self.carriages.delete(carriage) if is_stopped?
-  end
+  def set_starting_station 
+    @current_station = route.route_list[0]
+  end 
 
-  def is_correct_carriage? carriage
-    carriage_type =
-      case self.type
-      when "cargo"
-        CarCargo
-      when "passanger"
-        CarPassanger
-      end
-    carriage.class == carriage_type
-  end
-
-  def route=(route)
-    @route = route
-    self.current_station_id = 0
-  end
-
-  def current_station
-    route.stations[current_station_id] if route
-  end
-
-  def next_station
-    route.stations[current_station_id + 1] if has_next?
-  end
-
-  def previous_station
-    route.stations[current_station_id - 1] if has_previous?
-  end
-
-  def go
-    route.stations.each { |station| go_to_the_next_station } if at_start?
-  end
-
-  protected 
-
-  attr_accessor :current_station_id
-  attr_writer :speed
-
-  def go_to_the_next_station
-    if has_next?
-      gain_speed
-      current_station.delete_train(self) if current_station
-      self.current_station_id += 1
-      current_station.get_train(self) if current_station
-      stop
+  def go_forward 
+    if route.route_list.last != current_station && current_station_id <= route.route_list.length
+      @current_station_id += 1
+      @current_station = route.route_list[current_station_id]
     end
   end
 
+  def go_backward 
+    if route.route_list[0] != current_station && current_station_id > 0
+      @current_station_id -= 1
+      @current_station = route.route_list[current_station_id]
+    end
+  end
+    
+  def show_next_station
+    puts "Следующая станция #{route.route_list[@current_station_id + 1].station_name}"
+  end
+
+  def show_prev_station 
+    puts "Предыдущая станция #{route.route_list[@current_station_id - 1].station_name}"
+  end
+
+protected
+
+  attr_writer :speed # Скорость инициализируется при созданий объекта, изменение переменной speed происходит через метод increase_speed
+
   def validate!
-    raise ValidationError, "Wrong number" if number !~ NUMBER_PATTERN
-    raise ValidationError, "Type must contains 3 letters a-z or more" if type !~ TYPE_PATTERN
+    raise "Номер не может быть nil" if number.nil?
+    raise "Номер должен быть меньше 6 символов" if number.length > 6
+    raise "Номер имеет не верный формат" if number !~ NUMBER_FORMAT
     true
   end
-
-  def at_start?
-    current_station_id.zero?
-  end
-
-  def has_next?
-    current_station_id < route.stations.size - 1
-  end
-
-  def has_previous?
-    current_station_id > 0
-  end
-
-  def is_stopped?
-    speed.zero?
-  end
-
 
 end

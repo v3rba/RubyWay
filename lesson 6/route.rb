@@ -1,29 +1,36 @@
+require_relative 'instancecounter'
+
 class Route
-  attr_reader :stations
 
-  def initialize first_station, last_station
-    @stations = [first_station, last_station]
+  include InstanceCounter
+
+  attr_reader :route_list
+
+  def initialize(starting_station, ending_station)
+    register_instance
+    validate!
+    @route_list = [starting_station, ending_station]    
   end
 
-  def from
-    stations.first
+  def valid?
+    validate!
+  rescue
+    false
   end
 
-  def to
-    stations.last
+  def middle_station_add(station)
+    @route_list.insert(-2, station)
   end
 
-  def add_station station
-    @stations.insert(-2, station)
+  def middle_station_delete(station)
+    @route_list.delete(station)
   end
 
-  def remove_station station
-    unless [from, to].include?(station)
-  end
+  protected
 
-  def show_stations
-    @stations.each { |station| puts "#{station.name}" }
+  def validate!
+    raise "Начальная\\Конечная станция должна быть объектом класса Station" if starting_station.class && ending_station.class != Station
+    true   
   end
-end
-
+  
 end
