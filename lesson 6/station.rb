@@ -3,7 +3,7 @@ require "./validation_error"
 class Station
   attr_reader :name, :trains
 
-  NAME_PATTERN = /^[a-z]{3,}$/i
+  NAME_PATTERN = /^[a-z]{3}$/i
 
   def initialize name
     @name = name

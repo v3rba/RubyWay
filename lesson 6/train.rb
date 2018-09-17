@@ -4,8 +4,8 @@ class Train
   include Manufacturer
   attr_reader :number, :type, :route, :carriages, :speed
 
-  NUMBER_PATTERN = /^[a-z\d]{3}-?[a-z\d]{2}$/i
-  TYPE_PATTERN = /^[a-z]{3,}$/i
+  NUMBER_PATTERN = /^[a-z]{1}\d{3}[a-z]{2}$/i
+  TYPE_PATTERN = /^[a-z]{3}$/i
 
   def initialize(number, type, carriages)
     @number = number
