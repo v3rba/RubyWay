@@ -44,12 +44,12 @@ class Interface
     puts ""
     puts 'Input "exit" for exit'
     puts 'Input "create_station" for create a station'
-    puts 'Input "create_route" to make new route'
-    puts 'Input "create_train for create a train'
+    puts 'Input "create_route" to create new route'
+    puts 'Input "create_train" for create a train'
     puts 'Input "add_carriage" for add a carriage'
     puts 'Input "delete_carriage" for delete a carriage'
-    puts 'Input "move_train" for move a train'
-    puts 'Input "display_stations" to show trains in station'
+    puts 'Input "move_train" to move train between stations'
+    puts 'Input "display_stations" to sort trains by stations'
     puts ""
   end
 
@@ -116,20 +116,15 @@ class Interface
   end
 
   def enter_stations_route
-    puts 'Enter first station'
+    puts 'Choose first station'
     @first_index = choose_station
-    puts 'Enter last station'
+    puts 'Choose last station'
     @last_index = choose_station
   end
 
   def create_route
     enter_stations_route
     route = Route.new(@first_index, @last_index)
-  end
-
-  def take_route
-    train_index = choose_train
-    train_index.route = route
   end
 
   def move_train
@@ -147,6 +142,7 @@ class Interface
     route = Route.new(train.current_station, Station.find(station_index))
     train.route = route
     train.go
+    puts "#{route}"
     puts "Train went from #{route.from} to #{route.to}"
   end
 
