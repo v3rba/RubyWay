@@ -11,10 +11,6 @@ require "./validation_error"
 class Interface
   attr_reader :trains
 
-  def initialize
-    @route_collection = []
-  end
-
   def start
     loop do
       help
@@ -32,6 +28,8 @@ class Interface
         go_back
       when "create_route"
         create_route
+      when "take_route"
+        take_route
       when "route_for_train"
         route_for_train
       when "add_carriage"
@@ -55,6 +53,7 @@ class Interface
     puts 'Input "exit" for exit'
     puts 'Input "create_station" for create a station'
     puts 'Input "create_route" to make new route'
+    puts 'Input "take_route" to take route'
     puts 'Input "go_forward" moves train to next station'
     puts 'Input "go_backward" moves train to next station'
     puts 'Input "create_train for create a train'
@@ -140,6 +139,27 @@ class Interface
     route = Route.new(@first_index, @last_index)
   end
 
+  def take_route
+    train_index = choose_train
+    train_index.route = route
+  end
+
+  def train_to_station
+    raise "You have to create train first" if Train.all.empty?
+    raise "You have to create station first" if Station.all.empty?
+    puts "Put train number?"
+    number = gets.chomp
+    train = Train.find(number)
+    raise "Cant find this train" if train.nil?
+    puts "Enter station name to move your train"
+    name = gets.chomp
+    station = Station.all.detect{|station| station.name == name}
+    raise "Error. Cant find this station" if station.nil?
+    station.take(train)
+  rescue RuntimeError => e
+    puts "Error: #{e.message}"
+end
+
   def move_train
     train_index = choose_train
     if check_train_index?(train_index)
@@ -159,28 +179,7 @@ class Interface
   end
 
 # =====================================================================
-  
-  def go_forward
-  begin
-    train_index = choose_train
-    train_index.go
-    puts 'Train goes forward'
-  rescue RuntimeError => e
-    сaught_error(e)
-  end
-end
 
-def go_backward
-  begin
-    train_index = choose_train
-    train_index.go_back
-    puts 'Train goes backward'
-  rescue RuntimeError => e
-    сaught_error(e)
-  end
-end
-
-# =====================================================================
 
   def choose_train
     trains = Train.get_all
