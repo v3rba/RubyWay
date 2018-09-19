@@ -26,6 +26,10 @@ class Interface
         create_station
       when "create_train"
         create_train
+      when "go_forward"
+        go_forward
+      when "go_backward"
+        go_back
       when "create_route"
         create_route
       when "route_for_train"
@@ -51,6 +55,8 @@ class Interface
     puts 'Input "exit" for exit'
     puts 'Input "create_station" for create a station'
     puts 'Input "create_route" to make new route'
+    puts 'Input "go_forward" moves train to next station'
+    puts 'Input "go_backward" moves train to next station'
     puts 'Input "create_train for create a train'
     puts 'Input "add_carriage" for add a carriage'
     puts 'Input "delete_carriage" for delete a carriage'
@@ -154,21 +160,21 @@ class Interface
 
 # =====================================================================
   
-  def go
+  def go_forward
   begin
+    train_index = choose_train
+    train_index.go
     puts 'Train goes forward'
-    enter_number_train
-    @app.forward(@number_train)
   rescue RuntimeError => e
     сaught_error(e)
   end
 end
 
-def back
+def go_backward
   begin
+    train_index = choose_train
+    train_index.go_back
     puts 'Train goes backward'
-    enter_number_train
-    @app.back_station(@number_train)
   rescue RuntimeError => e
     сaught_error(e)
   end
