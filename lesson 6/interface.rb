@@ -9,7 +9,7 @@ require "./route"
 require "./validation_error"
 
 class Interface
-  attr_reader :trains
+  attr_reader :trains, :route
 
   def start
     loop do
@@ -22,16 +22,8 @@ class Interface
         create_station
       when "create_train"
         create_train
-      when "go_forward"
-        go_forward
-      when "go_backward"
-        go_back
       when "create_route"
         create_route
-      when "take_route"
-        take_route
-      when "route_for_train"
-        route_for_train
       when "add_carriage"
         add_carriage
       when "delete_carriage"
@@ -46,16 +38,13 @@ class Interface
     end
   end
 
-  private # TrainConsole hasn't subclasses, helper methods
+  private
 
   def help
     puts ""
     puts 'Input "exit" for exit'
     puts 'Input "create_station" for create a station'
     puts 'Input "create_route" to make new route'
-    puts 'Input "take_route" to take route'
-    puts 'Input "go_forward" moves train to next station'
-    puts 'Input "go_backward" moves train to next station'
     puts 'Input "create_train for create a train'
     puts 'Input "add_carriage" for add a carriage'
     puts 'Input "delete_carriage" for delete a carriage'
@@ -126,7 +115,6 @@ class Interface
     gets.chomp.to_i
   end
 
-# ===================================================================== 
   def enter_stations_route
     puts 'Enter first station'
     @first_index = choose_station
@@ -143,22 +131,6 @@ class Interface
     train_index = choose_train
     train_index.route = route
   end
-
-  def train_to_station
-    raise "You have to create train first" if Train.all.empty?
-    raise "You have to create station first" if Station.all.empty?
-    puts "Put train number?"
-    number = gets.chomp
-    train = Train.find(number)
-    raise "Cant find this train" if train.nil?
-    puts "Enter station name to move your train"
-    name = gets.chomp
-    station = Station.all.detect{|station| station.name == name}
-    raise "Error. Cant find this station" if station.nil?
-    station.take(train)
-  rescue RuntimeError => e
-    puts "Error: #{e.message}"
-end
 
   def move_train
     train_index = choose_train
@@ -177,9 +149,6 @@ end
     train.go
     puts "Train went from #{route.from} to #{route.to}"
   end
-
-# =====================================================================
-
 
   def choose_train
     trains = Train.get_all
