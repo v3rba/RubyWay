@@ -26,4 +26,5 @@ class Route
   def default_insert_position
     -2
   end
+
 end
