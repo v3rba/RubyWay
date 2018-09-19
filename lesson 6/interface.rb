@@ -101,17 +101,6 @@ class Interface
     end
   end
 
-  def move_train
-    train_index = choose_train
-
-    if check_train_index?(train_index)
-      puts "Wrong index"
-    else
-      station_index = choose_station
-      move_train!(train_index, station_index) unless check_station_index?(station_index)
-    end
-  end
-
   def display_stations
     index = choose_station
     station = Station.find(index)
@@ -132,15 +121,60 @@ class Interface
     gets.chomp.to_i
   end
 
-  def create_route
-    puts "Choose starting station "
-    first_index = choose_station
-    puts "Choose last station "
-    last_index = choose_station
-    route = Route.new(first_index, last_index)
-    puts "Your have been created: #{route}"
+# ===================================================================== 
+  def enter_stations_route
+    puts 'Enter first station'
+    @first_index = choose_station
+    puts 'Enter last station'
+    @last_index = choose_station
   end
 
+  def create_route
+    enter_stations_route
+    route = Route.new(@first_index, @last_index)
+  end
+
+  def move_train
+    train_index = choose_train
+    if check_train_index?(train_index)
+      puts "Wrong index"
+    else
+      station_index = choose_station
+      move_train!(train_index, station_index) unless check_station_index?(station_index)
+    end
+  end
+
+  def move_train!(train_index, station_index)
+    train = Train.find(train_index)
+    route = Route.new(train.current_station, Station.find(station_index))
+    train.route = route
+    train.go
+    puts "Train went from #{route.from} to #{route.to}"
+  end
+
+# =====================================================================
+  
+  def go
+  begin
+    puts 'Train goes forward'
+    enter_number_train
+    @app.forward(@number_train)
+  rescue RuntimeError => e
+    сaught_error(e)
+  end
+end
+
+def back
+  begin
+    puts 'Train goes backward'
+    enter_number_train
+    @app.back_station(@number_train)
+  rescue RuntimeError => e
+    сaught_error(e)
+  end
+end
+
+# =====================================================================
 
   def choose_train
     trains = Train.get_all
@@ -198,14 +232,6 @@ class Interface
     end
   end
 
-  def move_train!(train_index, station_index)
-    train = Train.find(train_index)
-    route = Route.new(train.current_station, Station.find(station_index))
-    train.route = route
-    train.go
-    puts "Train went from #{route.from} to #{route.to}"
-  end
-
   def check_station_index?(index)
     Station.find(index).nil?
   end
@@ -213,4 +239,9 @@ class Interface
   def check_train_index?(index)
     Train.find(index).nil?
   end
+
+  def check_route_index?(index)
+    Route.find(index).nil?
+  end
+
 end

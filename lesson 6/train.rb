@@ -43,6 +43,11 @@ class Train
     route.stations.each { |station| go_to_the_next_station } if at_start?
   end
 
+  def go_back
+    route.stations.each { |station| go_to_the_next_station }
+  end
+
+
   def go_to_the_next_station
     go_to_the_next_station! if has_next?
   end
@@ -78,6 +83,14 @@ class Train
     gain_speed
     current_station.send_out(self) if current_station
     self.current_station_id += 1
+    current_station.take(self) if current_station
+    stop
+  end
+
+  def go_to_the_last_station!
+    gain_speed
+    current_station.take(self) if current_station
+    self.current_station_id -= 1
     current_station.take(self) if current_station
     stop
   end
