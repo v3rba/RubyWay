@@ -27,7 +27,7 @@ class Interface
       when "create_train"
         create_train
       when "create_route"
-        make_route
+        create_route
       when "route_for_train"
         route_for_train
       when "add_carriage"
@@ -50,8 +50,7 @@ class Interface
     puts ""
     puts 'Input "exit" for exit'
     puts 'Input "create_station" for create a station'
-    puts 'Input "create_route" to create a new route'
-    puts 'Input "route_for_train" for putting train on route'
+    puts 'Input "create_route" to make new route'
     puts 'Input "create_train for create a train'
     puts 'Input "add_carriage" for add a carriage'
     puts 'Input "delete_carriage" for delete a carriage'
@@ -67,49 +66,6 @@ class Interface
   rescue ValidationError => e
     puts e.message
     retry
-  end
-
-  def enter_stations_route
-    puts 'Введите станцию отправления'
-    @first_station = gets.chomp
-    puts 'Введите конечную станцию'
-    @last_station = gets.chomp
-  end
-
-  def make_route
-    begin
-      puts '***** Making new route *****'
-      enter_stations_route
-      create_route(@first_station, @last_station)
-      puts "#{@first_station} #{@last_station}"
-    rescue RuntimeError => e
-      сaught_error(e)
-    end
-  end
-
-  def create_route(first_station, last_station)
-    @route_collection << Route.new(first_station, last_station)
-  end
-
-  def route_guidance(number_train, first_station, last_station)
-    train = get_train(number_train)
-    route = get_route(first_station, last_station)
-    train.route_station(route) if train && route
-  end
-
-  def route_for_train
-    begin
-      enter_number_train
-      enter_stations_route
-      route_guidance(@number_train, @first_station, @last_station)
-    rescue RuntimeError => e
-      сaught_error(e)
-    end
-  end
-
-  def enter_number_train
-    puts 'Enter train number'
-    @number_train = gets.chomp
   end
 
   def create_train
@@ -175,6 +131,16 @@ class Interface
     puts "Choose station by index from 0 to #{stations.size - 1}"
     gets.chomp.to_i
   end
+
+  def create_route
+    puts "Choose starting station "
+    first_index = choose_station
+    puts "Choose last station "
+    last_index = choose_station
+    route = Route.new(first_index, last_index)
+    puts "Your have been created: #{route}"
+  end
+
 
   def choose_train
     trains = Train.get_all
