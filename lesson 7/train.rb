@@ -34,6 +34,10 @@ class Train
     self.carriages.delete(carriage) if is_stopped?
   end
 
+  def each_carriage(&block)
+    block_given? ? carriages.each_with_index { |carriage, index| yield(carriage, index) } : carriages
+  end
+
   def route=(route)
     @route = route
     self.current_station_id = start_station_id
@@ -76,8 +80,8 @@ class Train
 
   protected # Train has sublasses, all methods are just helpers for main methods
 
-  attr_accessor :current_station_id # Inner system field
-  attr_writer :speed # You should change speed only by methods
+  attr_accessor :current_station_id
+  attr_writer :speed
 
   def go_to_the_next_station!
     gain_speed
