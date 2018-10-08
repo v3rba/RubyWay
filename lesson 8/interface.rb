@@ -39,6 +39,8 @@ class Interface
         display_station_trains
       when 'display_train_carriages'
         display_train_carriages
+      when 'take_a_place'
+        take_a_place
       else
         unknown_command
       end
@@ -60,6 +62,7 @@ class Interface
     puts 'Input "display_stations" to sort trains by stations'
     puts 'Input "display_station_trains" for display the trains on the station'
     puts 'Input "display_train_carriages" for display the carriages of the train'
+    puts 'Input "take_a_place" for take a place'
     puts ""
   end
 
@@ -135,6 +138,14 @@ class Interface
     train.each_carriage do |carriage, index|
       puts "Number: #{index}, type: #{train.type}, free space: #{carriage.free_space}"
     end
+  end
+
+  def take_a_place
+    carriage = PassengerCarriage.find(choose_passenger_carriage)
+    carriage.take_a_place
+  rescue CarriageOverflowedError => e
+    puts e.message
+    retry
   end
 
   def unknown_command
