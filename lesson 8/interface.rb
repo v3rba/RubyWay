@@ -41,6 +41,8 @@ class Interface
         display_train_carriages
       when 'take_a_place'
         take_a_place
+      when 'fill_capacity'
+        fill_capacity
       else
         unknown_command
       end
@@ -63,6 +65,7 @@ class Interface
     puts 'Input "display_station_trains" for display the trains on the station'
     puts 'Input "display_train_carriages" for display the carriages of the train'
     puts 'Input "take_a_place" for take a place'
+    puts 'Input "fill_capacity" for fill some capacity'
     puts ""
   end
 
@@ -143,6 +146,15 @@ class Interface
   def take_a_place
     carriage = PassengerCarriage.find(choose_passenger_carriage)
     carriage.take_a_place
+  rescue CarriageOverflowedError => e
+    puts e.message
+    retry
+  end
+
+  def fill_capacity
+    carriage = CargoCarriage.find(choose_cargo_carriage)
+    capacity = input_capacity
+    carriage.fill(capacity)
   rescue CarriageOverflowedError => e
     puts e.message
     retry
