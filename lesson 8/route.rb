@@ -21,7 +21,7 @@ class Route
     stations.delete(station) if station != from && station != to
   end
 
-  private # Route hasn't subclasses, system value
+  private
 
   def default_insert_position
     -2

@@ -35,6 +35,8 @@ class Interface
         move_train
       when "display_stations"
         display_stations
+      when 'display_station_trains'
+        display_station_trains
       else
         unknown_command
       end
@@ -54,6 +56,7 @@ class Interface
     puts 'Input "delete_carriage" for delete a carriage'
     puts 'Input "move_train" to move train between stations'
     puts 'Input "display_stations" to sort trains by stations'
+    puts 'Input "display_station_trains" for display the trains on the station'
     puts ""
   end
 
@@ -116,6 +119,13 @@ class Interface
     station = Station.find(index)
     puts "Station #{index}, Trains:"
     puts station.trains unless station.nil?
+  end
+
+  def display_station_trains!(station)
+    station.each_train do |train|
+      puts "Train, number: #{train.number}, type: #{train.type}, carriages count: #{train.carriages.size}"
+      yield(train) if block_given?
+    end
   end
 
   def unknown_command

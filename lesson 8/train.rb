@@ -78,7 +78,7 @@ class Train
     false
   end
 
-  protected # Train has sublasses, all methods are just helpers for main methods
+  protected
 
   attr_accessor :current_station_id
   attr_writer :speed
