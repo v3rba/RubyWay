@@ -37,6 +37,8 @@ class Interface
         display_stations
       when 'display_station_trains'
         display_station_trains
+      when 'display_train_carriages'
+        display_train_carriages
       else
         unknown_command
       end
@@ -57,6 +59,7 @@ class Interface
     puts 'Input "move_train" to move train between stations'
     puts 'Input "display_stations" to sort trains by stations'
     puts 'Input "display_station_trains" for display the trains on the station'
+    puts 'Input "display_train_carriages" for display the carriages of the train'
     puts ""
   end
 
@@ -125,6 +128,12 @@ class Interface
     station.each_train do |train|
       puts "Train, number: #{train.number}, type: #{train.type}, carriages count: #{train.carriages.size}"
       yield(train) if block_given?
+    end
+  end
+
+  def display_train_carriages!(train)
+    train.each_carriage do |carriage, index|
+      puts "Number: #{index}, type: #{train.type}, free space: #{carriage.free_space}"
     end
   end
 
