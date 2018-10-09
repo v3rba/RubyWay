@@ -1,7 +1,7 @@
-require "./manufacturer"
-require "./instances"
-require "./carriage_overflowed_error"
-require "./validation_error"
+require './manufacturer'
+require './instances'
+require './carriage_overflowed_error'
+require './validation_error'
 
 class Carriage
   include Manufacturer
@@ -31,11 +31,13 @@ class Carriage
 
   def validate!(capacity)
     raise ValidationError, "Capacity can't be negative" if capacity < 0
+
     true
   end
 
   def validate_free!(capacity)
-    raise CarriageOverflowedError, "Carriage has been overflowed" if free_space < capacity
+    raise CarriageOverflowedError, 'Carriage has been overflowed' if free_space < capacity
+
     true
   end
 end

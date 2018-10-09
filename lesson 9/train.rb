@@ -1,5 +1,5 @@
-require "./manufacturer"
-require "./validation_error"
+require './manufacturer'
+require './validation_error'
 
 class Train
   include Manufacturer
@@ -27,14 +27,14 @@ class Train
   end
 
   def add_carriage(carriage)
-    self.carriages << carriage if is_stopped? && is_correct_carriage?(carriage)
+    carriages << carriage if is_stopped? && is_correct_carriage?(carriage)
   end
 
-  def delete_carriage(carriage = self.carriages.last)
-    self.carriages.delete(carriage) if is_stopped?
+  def delete_carriage(carriage = carriages.last)
+    carriages.delete(carriage) if is_stopped?
   end
 
-  def each_carriage(&block)
+  def each_carriage
     block_given? ? carriages.each_with_index { |carriage, index| yield(carriage, index) } : carriages
   end
 
@@ -44,13 +44,12 @@ class Train
   end
 
   def go
-    route.stations.each { |station| go_to_the_next_station } if at_start?
+    route.stations.each { |_station| go_to_the_next_station } if at_start?
   end
 
   def go_back
-    route.stations.each { |station| go_to_the_next_station }
+    route.stations.each { |_station| go_to_the_next_station }
   end
-
 
   def go_to_the_next_station
     go_to_the_next_station! if has_next?
@@ -74,7 +73,7 @@ class Train
 
   def valid?
     validate!
-  rescue
+  rescue StandardError
     false
   end
 
@@ -100,8 +99,9 @@ class Train
   end
 
   def validate!
-    raise ValidationError, "Wrong number" if number !~ NUMBER_PATTERN
-    raise ValidationError, "Type must contains 3 letters a-z or more" if type !~ TYPE_PATTERN
+    raise ValidationError, 'Wrong number' if number !~ NUMBER_PATTERN
+    raise ValidationError, 'Type must contains 3 letters a-z or more' if type !~ TYPE_PATTERN
+
     true
   end
 
@@ -119,10 +119,10 @@ class Train
 
   def is_correct_carriage?(carriage)
     carriage_type =
-      case self.type
-      when "cargo"
+      case type
+      when 'cargo'
         CargoCarriage
-      when "passenger"
+      when 'passenger'
         PassengerCarriage
       else
         Carriage

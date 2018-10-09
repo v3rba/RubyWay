@@ -1,5 +1,5 @@
-require "./instances"
-require "./validation_error"
+require './instances'
+require './validation_error'
 
 class Station
   include Instances
@@ -28,20 +28,21 @@ class Station
     trains.select { |train| train.type == type }
   end
 
-  def each_train(&block)
+  def each_train
     block_given? ? trains.each { |train| yield(train) } : trains
   end
 
   def valid?
     validate!
-  rescue
+  rescue StandardError
     false
   end
 
   protected
 
   def validate!
-    raise ValidationError, "Name must contains 3 letters a-z or more" if name !~ NAME_PATTERN
+    raise ValidationError, 'Name must contains 3 letters a-z or more' if name !~ NAME_PATTERN
+
     true
   end
 end

@@ -3,11 +3,11 @@ module Instances
     attr_accessor :instances
 
     def get_all
-      self.instances
+      instances
     end
 
     def find(id)
-      self.instances[id]
+      instances[id]
     end
   end
 

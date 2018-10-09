@@ -1,13 +1,13 @@
-require "./station"
-require "./train"
-require "./cargo_train"
-require "./passenger_train"
-require "./carriage"
-require "./cargo_carriage"
-require "./passenger_carriage"
-require "./route"
-require "./validation_error"
-require "./carriage_overflowed_error"
+require './station'
+require './train'
+require './cargo_train'
+require './passenger_train'
+require './carriage'
+require './cargo_carriage'
+require './passenger_carriage'
+require './route'
+require './validation_error'
+require './carriage_overflowed_error'
 
 class Interface
   attr_reader :trains, :route
@@ -17,23 +17,23 @@ class Interface
       help
 
       case gets.chomp
-      when "exit"
+      when 'exit'
         break
-      when "create_test_data"
+      when 'create_test_data'
         create_test_data
-      when "create_station"
+      when 'create_station'
         create_station
-      when "create_train"
+      when 'create_train'
         create_train
-      when "create_route"
+      when 'create_route'
         create_route
-      when "add_carriage"
+      when 'add_carriage'
         add_carriage
-      when "delete_carriage"
+      when 'delete_carriage'
         delete_carriage
-      when "move_train"
+      when 'move_train'
         move_train
-      when "display_stations"
+      when 'display_stations'
         display_stations
       when 'display_station_trains'
         display_station_trains
@@ -52,7 +52,7 @@ class Interface
   private
 
   def help
-    puts ""
+    puts ''
     puts 'Input "exit" for exit'
     puts 'Input "create_test_data" for create test data'
     puts 'Input "create_station" for create a station'
@@ -66,7 +66,7 @@ class Interface
     puts 'Input "display_train_carriages" for display the carriages of the train'
     puts 'Input "take_a_place" for take a place'
     puts 'Input "fill_capacity" for fill some capacity'
-    puts ""
+    puts ''
   end
 
   def create_test_data
@@ -102,13 +102,13 @@ class Interface
     index = choose_train
 
     if check_train_index?(index)
-      puts "Wrong index"
+      puts 'Wrong index'
     else
       train = Train.find(index)
       carriage = get_carriage(train.type)
 
       train.add_carriage(carriage)
-      puts "Carriage has been added"
+      puts 'Carriage has been added'
     end
   end
 
@@ -116,10 +116,10 @@ class Interface
     index = choose_train
 
     if check_train_index?(index)
-      puts "Wrong index"
+      puts 'Wrong index'
     else
       Train.find(index).delete_carriage
-      puts "Carriage has been deleted"
+      puts 'Carriage has been deleted'
     end
   end
 
@@ -166,7 +166,7 @@ class Interface
 
   def choose_station
     stations = Station.get_all
-    puts "Your stations"
+    puts 'Your stations'
     puts stations
 
     puts "Choose station by index from 0 to #{stations.size - 1}"
@@ -188,7 +188,7 @@ class Interface
   def move_train
     train_index = choose_train
     if check_train_index?(train_index)
-      puts "Wrong index"
+      puts 'Wrong index'
     else
       station_index = choose_station
       move_train!(train_index, station_index) unless check_station_index?(station_index)
@@ -200,13 +200,13 @@ class Interface
     route = Route.new(train.current_station, Station.find(station_index))
     train.route = route
     train.go
-    puts "#{route}"
+    puts route.to_s
     puts "Train went from #{route.from} to #{route.to}"
   end
 
   def choose_train
     trains = Train.get_all
-    puts "Your trains:"
+    puts 'Your trains:'
     puts trains
 
     puts "Choose train by index from 0 to #{trains.size - 1}"
@@ -221,28 +221,28 @@ class Interface
   end
 
   def station_input
-    puts "Input name of the station"
+    puts 'Input name of the station'
     gets.chomp
   end
 
   def train_input
-    puts "Input number of the train"
+    puts 'Input number of the train'
     number = gets.chomp
 
     puts 'Input type("cargo" for cargo or "passenger" for passenger) of the train'
     type = gets.chomp
 
-    puts "Input count of carriages"
+    puts 'Input count of carriages'
     carriages_count = gets.chomp.to_i
 
-    return number, type, carriages_count
+    [number, type, carriages_count]
   end
 
   def get_train(number, type)
     case type
-    when "cargo"
+    when 'cargo'
       CargoTrain.new(number, [])
-    when "passenger"
+    when 'passenger'
       PassengerTrain.new(number, [])
     else
       Train.new(number, type, [])
@@ -251,9 +251,9 @@ class Interface
 
   def get_carriage(type)
     case type
-    when "cargo"
+    when 'cargo'
       CargoCarriage.new
-    when "passenger"
+    when 'passenger'
       PassengerCarriage.new
     else
       Carriage.new
@@ -271,5 +271,4 @@ class Interface
   def check_route_index?(index)
     Route.find(index).nil?
   end
-
 end
