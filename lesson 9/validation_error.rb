@@ -1,2 +1,1 @@
-class ValidationError < RuntimeError
-end
+class ValidationError < RuntimeError; end

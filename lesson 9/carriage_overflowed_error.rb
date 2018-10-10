@@ -1,2 +1,1 @@
-class CarriageOverflowedError < RuntimeError
-end
+class CarriageOverflowedError < RuntimeError; end

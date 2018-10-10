@@ -1,4 +1,4 @@
-class PassangerCarriage < Carriage
+class PassengerCarriage < Carriage
   ONE_PLACE = 1
 
   def take_a_place
