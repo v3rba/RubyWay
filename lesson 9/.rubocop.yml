@@ -28,3 +28,6 @@ Metrics/CyclomaticComplexity:
                  A complexity metric that is strongly correlated to the number
                  of test cases needed to validate a method.
   Enabled: false
+
+Lint/UselessAssignment: 
+  Enabled: false
