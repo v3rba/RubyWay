@@ -27,11 +27,11 @@ class Train
   end
 
   def add_carriage(carriage)
-    carriages << carriage if is_stopped? && is_correct_carriage?(carriage)
+    carriages << carriage if stopped? && correct_carriage?(carriage)
   end
 
   def delete_carriage(carriage = carriages.last)
-    carriages.delete(carriage) if is_stopped?
+    carriages.delete(carriage) if stopped?
   end
 
   def each_carriage
@@ -52,7 +52,7 @@ class Train
   end
 
   def go_to_the_next_station
-    go_to_the_next_station! if has_next?
+    go_to_the_next_station! if next?
   end
 
   def current_station
@@ -60,14 +60,14 @@ class Train
   end
 
   def next_station
-    route.stations[current_station_id + 1] if has_next?
+    route.stations[current_station_id + 1] if next?
   end
 
   def previous_station
-    route.stations[current_station_id - 1] if has_previous?
+    route.stations[current_station_id - 1] if previous?
   end
 
-  def is_stopped?
+  def stopped?
     speed.zero?
   end
 
@@ -109,15 +109,15 @@ class Train
     current_station_id.zero?
   end
 
-  def has_next?
+  def next?
     current_station_id < route.stations.size - 1
   end
 
-  def has_previous?
+  def previous?
     current_station_id > 0
   end
 
-  def is_correct_carriage?(carriage)
+  def correct_carriage?(carriage)
     carriage_type =
       case type
       when 'cargo'

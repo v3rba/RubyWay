@@ -5,7 +5,7 @@ class Station
   include Instances
   attr_reader :name, :trains
 
-  @@stations = []
+  @stations = []
 
   NAME_PATTERN = /^[a-z]{3,}$/i
 
