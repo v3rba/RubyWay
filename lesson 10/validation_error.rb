@@ -1,0 +1,1 @@
+class ValidationError < RuntimeError; end
