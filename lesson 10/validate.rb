@@ -20,4 +20,11 @@ module InstanceMethods
       false
     end
 
+    def presence(value)
+      unless value.nil? || value == ''
+        raise ValidationError, "Value can't be blank"
+      end
+      true
+    end
+
 end
