@@ -39,5 +39,4 @@ class Station
   rescue StandardError
     false
   end
-
 end

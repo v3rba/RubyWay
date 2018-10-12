@@ -1,5 +1,5 @@
 module Accessors
-  
+
   module ClassMethods
     def attr_accessor_with_history(*names)
       names.each do |name|
@@ -14,5 +14,5 @@ module Accessors
         raise "Type should be #{type}" unless type == value.class
         instance_variable_set sym_name, value
       end
-    end
+  end
 end
