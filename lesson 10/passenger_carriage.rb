@@ -1,3 +1,5 @@
+require './carriage'
+
 class PassengerCarriage < Carriage
   ONE_PLACE = 1
 

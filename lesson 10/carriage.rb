@@ -2,17 +2,20 @@ require './manufacturer'
 require './instances'
 require './carriage_overflowed_error'
 require './validation_error'
+require './validation'
 
 class Carriage
   include Manufacturer
   include Instances
+  include Validation
 
   attr_reader :capacity, :filled_capacity
+  validate :capacity, :positive
 
   def initialize(capacity)
     @capacity = capacity
     @filled_capacity = 0
-    validate!(capacity)
+    validate!
     add(self)
   end
 
@@ -28,12 +31,6 @@ class Carriage
   protected
 
   attr_writer :filled_capacity
-
-  def validate!(capacity)
-    raise ValidationError, "Capacity can't be negative" if capacity < 0
-
-    true
-  end
 
   def validate_free!(capacity)
     raise CarriageOverflowedError, 'Carriage has been overflowed' if free_space < capacity
