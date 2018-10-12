@@ -1,10 +1,10 @@
 require './instances'
-require './validation_error'
 require './validation'
 
 class Station
   include Instances
   include Validation
+
   attr_reader :name, :trains
 
   @stations = []
@@ -40,11 +40,4 @@ class Station
     false
   end
 
-  protected
-
-  def validate!
-    raise ValidationError, 'Name must contains 3 letters a-z or more' if name !~ NAME_PATTERN
-
-    true
-  end
 end

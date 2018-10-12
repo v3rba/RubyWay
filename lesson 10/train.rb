@@ -1,11 +1,11 @@
 require './manufacturer'
-require './validation_error'
-require './validate'
+require './validation'
 
 class Train
   include Manufacturer
   include Instances
   include Validation
+
   attr_reader :number, :type, :route, :carriages, :speed
 
   NUMBER_PATTERN = /^[a-z\d]{3}-?[a-z\d]{2}$/i
@@ -98,13 +98,6 @@ class Train
     self.current_station_id -= 1
     current_station.take(self) if current_station
     stop
-  end
-
-  def validate!
-    raise ValidationError, 'Wrong number' if number !~ NUMBER_PATTERN
-    raise ValidationError, 'Type must contains 3 letters a-z or more' if type !~ TYPE_PATTERN
-
-    true
   end
 
   def at_start?

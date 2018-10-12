@@ -8,6 +8,7 @@ require './passenger_carriage'
 require './route'
 require './validation_error'
 require './carriage_overflowed_error'
+require './validation'
 
 class Interface
   attr_reader :trains, :route

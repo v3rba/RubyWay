@@ -1,14 +1,16 @@
+require './validation_error'
+
 module Validation
 
   module ClassMethods
     def validate(field, method, *params)
       define_method("validate_#{field}_#{method}") do
         send(method.to_sym, instance_variable_get("@#{field}".to_sym), *params)
+      end
     end
   end
-end
 
-module InstanceMethods
+  module InstanceMethods
     def validate!
       public_methods.each { |method| send(method) if method =~ /^validate_/ }
       true
@@ -19,6 +21,8 @@ module InstanceMethods
     rescue
       false
     end
+
+    protected
 
     def presence(value)
       unless value.nil? || value == ''
@@ -41,5 +45,10 @@ module InstanceMethods
       raise ValidationError, 'Negative value' if value < 0
       true
     end
+  end
 
+  def self.included(receiver)
+    receiver.extend         ClassMethods
+    receiver.send :include, InstanceMethods
+  end
 end
