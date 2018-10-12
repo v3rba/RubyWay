@@ -27,4 +27,9 @@ module InstanceMethods
       true
     end
 
+    def format(value, reg_exp)
+      raise ValidationError, 'Wrong value' unless value =~ reg_exp
+      true
+    end
+
 end
