@@ -7,3 +7,10 @@ module Validation
     end
   end
 end
+
+module InstanceMethods
+    def validate!
+      public_methods.each { |method| send(method) if method =~ /^validate_/ }
+      true
+    end
+end
