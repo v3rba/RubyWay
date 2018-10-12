@@ -32,4 +32,9 @@ module InstanceMethods
       true
     end
 
+    def type(value, type_class)
+      raise ValidationError, 'Wrong type' unless value.class == type_class
+      true
+    end
+
 end
