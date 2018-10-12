@@ -13,4 +13,11 @@ module InstanceMethods
       public_methods.each { |method| send(method) if method =~ /^validate_/ }
       true
     end
+
+    def valid?
+      validate!
+    rescue
+      false
+    end
+
 end
