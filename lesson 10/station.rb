@@ -1,8 +1,10 @@
 require './instances'
 require './validation_error'
+require './validation'
 
 class Station
   include Instances
+  include Validation
   attr_reader :name, :trains
 
   @stations = []

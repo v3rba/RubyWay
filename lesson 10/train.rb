@@ -1,9 +1,11 @@
 require './manufacturer'
 require './validation_error'
+require './validate'
 
 class Train
   include Manufacturer
   include Instances
+  include Validation
   attr_reader :number, :type, :route, :carriages, :speed
 
   NUMBER_PATTERN = /^[a-z\d]{3}-?[a-z\d]{2}$/i

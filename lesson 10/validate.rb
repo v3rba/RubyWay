@@ -37,4 +37,9 @@ module InstanceMethods
       true
     end
 
+    def positive(value)
+      raise ValidationError, 'Negative value' if value < 0
+      true
+    end
+
 end
