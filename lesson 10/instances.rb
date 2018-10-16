@@ -1,8 +1,10 @@
 module Instances
+
   module ClassMethods
+
     attr_accessor :instances
 
-    def get_all
+    def all
       instances
     end
 
@@ -12,6 +14,7 @@ module Instances
   end
 
   module InstanceMethods
+
     protected
 
     def add(instance)
@@ -28,4 +31,5 @@ module Instances
     receiver.extend         ClassMethods
     receiver.send :include, InstanceMethods
   end
+
 end

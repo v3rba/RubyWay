@@ -1,15 +1,18 @@
 require './manufacturer'
+require './train_constants'
 require './validation'
 
 class Train
+
   include Manufacturer
   include Instances
+  include TrainConstants
   include Validation
 
   attr_reader :number, :type, :route, :carriages, :speed
 
-  NUMBER_PATTERN = /^[a-z\d]{3}-?[a-z\d]{2}$/i
-  TYPE_PATTERN = /^[a-z]{3,}$/i
+  validate :number, :format, NUMBER_PATTERN
+  validate :type, :format, TYPE_PATTERN
 
   def initialize(number, type, carriages)
     @number = number
@@ -37,7 +40,11 @@ class Train
   end
 
   def each_carriage
-    block_given? ? carriages.each_with_index { |carriage, index| yield(carriage, index) } : carriages
+    if block_given?
+      carriages.each_with_index { |carriage, index| yield(carriage, index) }
+    else
+      carriages
+    end
   end
 
   def route=(route)
@@ -46,11 +53,7 @@ class Train
   end
 
   def go
-    route.stations.each { |_station| go_to_the_next_station } if at_start?
-  end
-
-  def go_back
-    route.stations.each { |_station| go_to_the_next_station }
+    route.stations.each { go_to_the_next_station } if at_start?
   end
 
   def go_to_the_next_station
@@ -73,12 +76,6 @@ class Train
     speed.zero?
   end
 
-  def valid?
-    validate!
-  rescue StandardError
-    false
-  end
-
   protected
 
   attr_accessor :current_station_id
@@ -88,14 +85,6 @@ class Train
     gain_speed
     current_station.send_out(self) if current_station
     self.current_station_id += 1
-    current_station.take(self) if current_station
-    stop
-  end
-
-  def go_to_the_last_station!
-    gain_speed
-    current_station.take(self) if current_station
-    self.current_station_id -= 1
     current_station.take(self) if current_station
     stop
   end
@@ -113,31 +102,7 @@ class Train
   end
 
   def correct_carriage?(carriage)
-    carriage_type =
-      case type
-      when 'cargo'
-        CargoCarriage
-      when 'passenger'
-        PassengerCarriage
-      else
-        Carriage
-      end
-    carriage.class == carriage_type
+    carriage.class == (CARRIAGE_TYPES[type.to_sym] || Carriage)
   end
 
-  def initial_speed
-    0
-  end
-
-  def stop_speed
-    0
-  end
-
-  def gain_speed_difference
-    10
-  end
-
-  def start_station_id
-    0
-  end
 end

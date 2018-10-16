@@ -5,11 +5,11 @@ class Station
   include Instances
   include Validation
 
+  NAME_PATTERN = /^[a-z]{3,}$/i
+
   attr_reader :name, :trains
 
-  @stations = []
-
-  NAME_PATTERN = /^[a-z]{3,}$/i
+  validate :name, :format, NAME_PATTERN
 
   def initialize(name)
     @name = name
@@ -34,9 +34,4 @@ class Station
     block_given? ? trains.each { |train| yield(train) } : trains
   end
 
-  def valid?
-    validate!
-  rescue StandardError
-    false
-  end
 end

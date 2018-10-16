@@ -1,4 +1,5 @@
 module InstanceCounter
+
   module ClassMethods
     attr_accessor :instances
   end
@@ -16,4 +17,5 @@ module InstanceCounter
     receiver.extend         ClassMethods
     receiver.send :include, InstanceMethods
   end
+
 end

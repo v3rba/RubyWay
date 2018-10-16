@@ -1,4 +1,5 @@
 class Route
+
   attr_reader :stations
 
   def initialize(from, to)
@@ -26,4 +27,5 @@ class Route
   def default_insert_position
     -2
   end
+
 end

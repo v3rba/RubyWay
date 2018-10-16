@@ -1,10 +1,10 @@
 require './manufacturer'
 require './instances'
 require './carriage_overflowed_error'
-require './validation_error'
 require './validation'
 
 class Carriage
+
   include Manufacturer
   include Instances
   include Validation
@@ -37,4 +37,5 @@ class Carriage
 
     true
   end
+
 end
