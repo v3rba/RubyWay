@@ -1,52 +1,33 @@
 module Accessors
 
-  module ClassMethods
+  def attr_accessor_with_history(*names)
+    names.each do |name|
+      var_name = "@#{name}".to_sym
+      var_history = "@#{name}_history".to_sym
 
-    def attr_accessor_with_history(*names)
-      names.each do |name|
-        define_methods(name)
+      define_method(name.to_sym) { instance_variable_get(var_name) }
+      define_method("#{name}_history".to_sym) { instance_variable_get(var_history) }
+
+      define_method("#{name}=".to_sym) do |value|
+        history = instance_variable_get("@#{name}_history") || []
+
+        history << instance_variable_get(var_name)
+
+        instance_variable_set(var_name, value)
+        instance_variable_set(var_history, history)
       end
-
     end
-
-    def strong_attr_accessor(name, type)
-      sym_name = "@#{name}".to_sym
-      define_method(name) { instance_variable_get sym_name }
-      define_method("#{name}=") do |value|
-        raise "Type should be #{type}" unless type == value.class
-        instance_variable_set sym_name, value
-      end
-    end
-
-    protected
-
-    def define_methods(name)
-      sym_name = "@#{name}".to_sym
-      sym_history = "@#{name}_history".to_sym
-      define_method(name) { instance_variable_get sym_name }
-      define_method("#{name}=") do |value|
-        instance_variable_set(sym_history, []) if empty_history?(sym_history)
-        instance_variable_get(sym_history).send(:<<, value)
-        instance_variable_set sym_name, value
-      end
-      define_method("#{name}_history") { instance_variable_get(sym_history) }
-    end
-
   end
 
-  module InstanceMethods
+  def strong_attr_accessor(name, type)
+    var_name = "@#{name}".to_sym
 
-    protected
+    define_method(name.to_sym) { instance_variable_get(var_name) }
 
-    def empty_history?(sym_history)
-      instance_variable_get(sym_history).nil?
+    define_method("#{name}=".to_sym) do |value|
+      raise TypeError, 'Wrong type argument!' if value.class != type
+      instance_variable_set(var_name, value)
     end
-
-  end
-
-  def self.included(receiver)
-    receiver.send :include, InstanceMethods
-    receiver.extend         ClassMethods
   end
 
 end
