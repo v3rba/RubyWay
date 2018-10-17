@@ -1,57 +1,60 @@
-require './validation_error'
-
 module Validation
+  def self.included(base)
+    base.extend ClassMethods
+    base.send :include, InstanceMethods
+  end
 
   module ClassMethods
-    def validate(field, method, *params)
-      define_method("validate_#{field}_#{method}") do
-        send(method.to_sym, instance_variable_get("@#{field}".to_sym), *params)
-      end
+    attr_reader :checks
+
+    def validate(attr, kind, *params)
+      @checks ||= {}
+      @checks[attr] ||= []
+      @checks[attr] << { kind: kind, params: params }
     end
   end
 
   module InstanceMethods
-
-    def validate!
-      public_methods.each { |method| send(method) if method =~ /^validate_/ }
-      true
-    end
-
     def valid?
       validate!
+      true
     rescue
       false
     end
 
-    protected
+    private
 
-    def presence(value)
-      unless value.nil? || value == ''
-        raise ValidationError, "Value can't be blank"
+    def validate_presence(name, value, _params)
+      raise "'#{name}' is nil or empty!" if value.nil? || value == ''
+    end
+
+    def validate_type(name, value, params)
+      raise "'#{name}' is't '#{params.first}'" if value.class != params.first
+    end
+
+    def validate_format(name, value, params)
+      raise "'#{name}' have wrong format '#{params[1]}'" if value !~ params[0]
+    end
+
+    def validate_range(name, value, _params)
+      value = value.to_i
+      raise "'#{name}' is not a ditig! Re-enter a digital value!" if value.zero?
+      raise "Out of '#{name}', please try again!" if value.negative?
+    end
+
+    def validate_doubling(name, value, _params)
+      self.class.class_variable_get(:@@all_stations).each do |station|
+        raise "'#{name}' is already exists! Re-enter." if value == station.name
       end
-      true
     end
 
-    def format(value, reg_exp)
-      raise ValidationError, 'Wrong value' unless value =~ reg_exp
-      true
+    def validate!
+      self.class.checks.each do |attr_name, attr_validations|
+        value = instance_variable_get("@#{attr_name}".to_sym)
+        attr_validations.each do |attributes|
+          send("validate_#{attributes[:kind]}", attr_name, value, attributes[:params])
+        end
+      end
     end
-
-    def type(value, type_class)
-      raise ValidationError, 'Wrong type' unless value.class == type_class
-      true
-    end
-
-    def positive(value)
-      raise ValidationError, 'Negative value' if value < 0
-      true
-    end
-
   end
-
-  def self.included(receiver)
-    receiver.extend         ClassMethods
-    receiver.send :include, InstanceMethods
-  end
-
 end
